@@ -1,28 +1,28 @@
-import pandas as pd
-from sklearn.model_selection import train_test_split
+import numpy as np
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import accuracy_score, classification_report
 
-# Load data
-data = pd.read_csv("mental_health.csv")
+# Example: synthetic training data (for demo purpose)
+# Features: [sleep_hours, work_hours, anxiety_level, mood_score]
+X_train = np.array([
+    [7, 8, 2, 7],
+    [6, 10, 5, 4],
+    [8, 7, 1, 8],
+    [5, 12, 7, 3]
+])
+y_train = np.array([0, 1, 0, 1])  # 0: Low stress, 1: High stress
 
-# Prepare data
-X = data[['Age', 'SleepHours', 'WorkHours', 'MoodScore', 'AnxietyScore']]
-y = data['StressLevel'].map({'Low': 0, 'High': 1})
-
-# Split data
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-
-# Model
+# Train model
 model = RandomForestClassifier()
 model.fit(X_train, y_train)
 
-# Prediction
-y_pred = model.predict(X_test)
+# New test input to predict
+test_input = np.array([[6, 9, 4, 5]])  # e.g., 6 hrs sleep, 9 hrs work, anxiety 4, mood 5
 
-# Evaluation
-print("Accuracy:", accuracy_score(y_test, y_pred))
-print("Report:\n", classification_report(y_test, y_pred))
+# Make prediction
+prediction = model.predict(test_input)
 
-# Sample prediction
-print("Sample Prediction:", model.predict([[23, 6, 10, 3, 4]]))  # Replace with custom values
+# Map prediction to label
+stress_label = 'High Stress' if prediction[0] == 1 else 'Low Stress'
+
+print(f"Test input: {test_input[0]}")
+print(f"Predicted stress level: {stress_label}")
